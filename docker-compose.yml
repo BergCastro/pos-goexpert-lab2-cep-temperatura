@@ -1,8 +1,20 @@
 version: "3.8"
 services:
-  app:
-    build: .
+  service-a:
+    build: ./service-a
     ports:
       - "8080:8080"
+    depends_on:
+      - service-b
     env_file:
-      - .env
+      - ./service-a/.env
+  service-b:
+    build: ./service-b
+    ports:
+      - "8081:8081"
+    env_file:
+      - ./service-b/.env
+  zipkin:
+    image: openzipkin/zipkin
+    ports:
+      - "9411:9411"
