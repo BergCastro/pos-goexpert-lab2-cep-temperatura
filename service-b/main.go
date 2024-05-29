@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
 	"time"
 
@@ -133,7 +134,8 @@ func getTemperature(ctx context.Context, city string) (*Temperature, error) {
     defer span.End()
 
     apiKey := os.Getenv("WEATHER_API_KEY")
-    url := fmt.Sprintf("https://api.weatherapi.com/v1/current.json?key=%s&q=%s", apiKey, city)
+    encodedCity := url.QueryEscape(city)
+    url := fmt.Sprintf("https://api.weatherapi.com/v1/current.json?key=%s&q=%s", apiKey, encodedCity)
     req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
     if err != nil {
         return nil, err
